@@ -2,6 +2,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:bloc/bloc.dart';
+import 'package:bloc_generator/src/bind_code_builder.dart';
 import 'package:bloc_generator/src/sink_code_builder.dart';
 import 'package:bloc_generator/src/stream_code_builder.dart';
 import 'package:source_gen/source_gen.dart';
@@ -12,6 +13,10 @@ class BlocModelVisitor extends SimpleElementVisitor {
   DartType className;
   List<SinkCodeBuilder> sinkCodeBuilders = [];
   List<StreamCodeBuilder> streamCodeBuilders = [];
+  List<BindCodeBuilder> bindCodeBuilders = [];
+  final ClassElement _classElement;
+
+  BlocModelVisitor(this._classElement);
 
   @override
   visitConstructorElement(ConstructorElement element) {
@@ -23,6 +28,7 @@ class BlocModelVisitor extends SimpleElementVisitor {
   visitFieldElement(FieldElement element) {
     var result = _scanForSink(element);
     _scanForStream(element, result);
+    _scanForBind(element);
   }
 
   bool _scanForSink(FieldElement element) {
@@ -50,6 +56,19 @@ class BlocModelVisitor extends SimpleElementVisitor {
     if (streamCodeBuilder != null) streamCodeBuilders.add(streamCodeBuilder);
   }
 
+  void _scanForBind(FieldElement element) {
+    var bindCodeBuilder = ifAnnotated<Bind, BindCodeBuilder>(
+      element,
+      (ConstantReader reader, FieldElement fieldElement) => BindCodeBuilder(
+        blocClass: _classElement,
+        field: fieldElement,
+        annotation: _bindFromConstantReader(reader),
+      ),
+    );
+
+    if (bindCodeBuilder != null) bindCodeBuilders.add(bindCodeBuilder);
+  }
+
   BlocStream _streamFromConstantReader(ConstantReader reader) {
     final obj = reader.objectValue;
     final name = obj.getField("name").toStringValue();
@@ -60,5 +79,14 @@ class BlocModelVisitor extends SimpleElementVisitor {
     final obj = reader.objectValue;
     final name = obj.getField("name").toStringValue();
     return BlocSink(name);
+  }
+
+  Bind _bindFromConstantReader(ConstantReader reader) {
+    final obj = reader.objectValue;
+    final methodName = obj.getField("methodName").toStringValue();
+    //final external = obj.getField("external").toBoolValue() ?? false;
+    return Bind(
+      methodName,
+    );
   }
 }

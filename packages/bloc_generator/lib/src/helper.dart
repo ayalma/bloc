@@ -8,7 +8,6 @@ TResult ifAnnotated<TAnnotation, TResult>(FieldElement element,
       TypeChecker.fromRuntime(TAnnotation).annotationsOf(element);
   if (annotations.isEmpty) return null;
   final annotation = ConstantReader(annotations.first);
-  print(annotation);
   return builder(annotation, element);
 }
 

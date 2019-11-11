@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/element/type.dart';
+import 'package:bloc_generator/src/bind_code_builder.dart';
 import 'package:bloc_generator/src/helper.dart';
 import 'package:bloc_generator/src/sink_code_builder.dart';
 import 'package:bloc_generator/src/stream_code_builder.dart';
@@ -9,8 +10,9 @@ class BlocCodeBuilder {
   final DartType className;
   final List<SinkCodeBuilder> sinks;
   final List<StreamCodeBuilder> streams;
+  final List<BindCodeBuilder> binds;
 
-  BlocCodeBuilder(this.className, this.sinks, this.streams);
+  BlocCodeBuilder(this.className, this.sinks, this.streams, this.binds);
 
   String get _name => privateName(this.className.name, "Generated");
 
@@ -49,6 +51,7 @@ class BlocCodeBuilder {
   void buildSubscription(ClassBuilder builder) {
     final block = BlockBuilder();
     block.statements.add(Code("this._parent = value;"));
+    this.binds.forEach((b) => b.buildSubscription(block));
 
     builder.methods.add(Method((b) => b
       ..name = "subscribeParent"

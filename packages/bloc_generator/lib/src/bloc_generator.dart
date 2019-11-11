@@ -10,11 +10,14 @@ class BlocGenerator extends GeneratorForAnnotation<BuiltBloc> {
   Iterable<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
     if (element is ClassElement) {
-      BlocModelVisitor visitor = BlocModelVisitor();
+      BlocModelVisitor visitor = BlocModelVisitor(element);
       element.visitChildren(visitor);
 
-      final codeBuilder = BlocCodeBuilder(visitor.className,
-          visitor.sinkCodeBuilders, visitor.streamCodeBuilders);
+      final codeBuilder = BlocCodeBuilder(
+          visitor.className,
+          visitor.sinkCodeBuilders,
+          visitor.streamCodeBuilders,
+          visitor.bindCodeBuilders);
 
       return codeBuilder.buildCode();
     }
