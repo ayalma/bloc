@@ -1,14 +1,16 @@
 import 'package:analyzer/dart/element/type.dart';
 import 'package:bloc_generator/src/helper.dart';
 import 'package:bloc_generator/src/sink_code_builder.dart';
+import 'package:bloc_generator/src/stream_code_builder.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 
 class BlocCodeBuilder {
   final DartType className;
   final List<SinkCodeBuilder> sinks;
+  final List<StreamCodeBuilder> streams;
 
-  BlocCodeBuilder(this.className, this.sinks);
+  BlocCodeBuilder(this.className, this.sinks, this.streams);
 
   String get _name => privateName(this.className.name, "Generated");
 
@@ -30,7 +32,7 @@ class BlocCodeBuilder {
       ..name = "_parent"
       ..type = refer(className.name)));
 
-    // this.streams.forEach((s) => s.buildGetter(builder));
+    this.streams.forEach((s) => s.buildGetter(builder));
     this.sinks.forEach((s) => s.buildGetter(builder));
 
     // this.sinkBinds.forEach((s) => s.buildGetter(builder));
@@ -61,6 +63,7 @@ class BlocCodeBuilder {
   void buildDispose(ClassBuilder builder) {
     final block = BlockBuilder();
     this.sinks.forEach((s) => s.buildDispose(block));
+    this.streams.forEach((s) => s.buildDispose(block));
 
     builder.methods.add(Method((b) => b
       ..name = "dispose"
