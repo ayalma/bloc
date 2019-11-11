@@ -1,0 +1,23 @@
+name: bloc_generator
+description: generator package for bloc
+version: 0.0.1
+author: Ali Mohammadi <alimohammadi7117@gmail.com>
+homepage:
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  build: ^1.2.1
+  source_gen: ^0.9.4+6
+  code_builder: ^3.2.0
+  analyzer: ^0.39.1
+  bloc:
+    path: ../bloc
+
+
+dev_dependencies:
+  build_test: ^0.10.0
+  build_runner: ^1.7.1
+  test: ^1.0.0
+

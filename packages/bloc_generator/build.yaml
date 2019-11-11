@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      bloc_generator|bloc:
+        enabled: true
+
+builders:
+  todo_reporter:
+    target: ":bloc_generator"
+    import: "package:bloc_generator/builder.dart"
+    builder_factories: ["blocGenerator"]
+    build_extensions: {".dart": [".bloc.g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
