@@ -6,10 +6,10 @@ part 'test_bloc.g.dart';
 
 @bloc
 class TestBloc extends Bloc with _TestBloc {
-  @BlocStream("testStream")
-  @BlocSink("runTest")
-  @Bind('_onRunTest')
+  @SinkBind('runTest', '_onRunTest')
   PublishSubject<String> addComment;
 
+  @BlocStream("result")
+  PublishSubject<int> result = PublishSubject();
   void _onRunTest(String event) {}
 }

@@ -3,6 +3,7 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_generator/src/bind_code_builder.dart';
+import 'package:bloc_generator/src/sink_bind_code_builder.dart';
 import 'package:bloc_generator/src/sink_code_builder.dart';
 import 'package:bloc_generator/src/stream_code_builder.dart';
 import 'package:source_gen/source_gen.dart';
@@ -14,6 +15,8 @@ class BlocModelVisitor extends SimpleElementVisitor {
   List<SinkCodeBuilder> sinkCodeBuilders = [];
   List<StreamCodeBuilder> streamCodeBuilders = [];
   List<BindCodeBuilder> bindCodeBuilders = [];
+  List<SinkBindCodeBuilder> sinkBindCodeBuilders = [];
+
   final ClassElement _classElement;
 
   BlocModelVisitor(this._classElement);
@@ -29,6 +32,7 @@ class BlocModelVisitor extends SimpleElementVisitor {
     var result = _scanForSink(element);
     _scanForStream(element, result);
     _scanForBind(element);
+    _scanForSinkBind(element);
   }
 
   bool _scanForSink(FieldElement element) {
@@ -69,6 +73,20 @@ class BlocModelVisitor extends SimpleElementVisitor {
     if (bindCodeBuilder != null) bindCodeBuilders.add(bindCodeBuilder);
   }
 
+  void _scanForSinkBind(FieldElement element) {
+    var sinkBindCodeBuilder = ifAnnotated<SinkBind, SinkBindCodeBuilder>(
+      element,
+      (ConstantReader reader, FieldElement fieldElement) => SinkBindCodeBuilder(
+        blocClass: _classElement,
+        field: fieldElement,
+        annotation: _sinkBindFromConstantReader(reader),
+      ),
+    );
+
+    if (sinkBindCodeBuilder != null)
+      sinkBindCodeBuilders.add(sinkBindCodeBuilder);
+  }
+
   BlocStream _streamFromConstantReader(ConstantReader reader) {
     final obj = reader.objectValue;
     final name = obj.getField("name").toStringValue();
@@ -88,5 +106,12 @@ class BlocModelVisitor extends SimpleElementVisitor {
     return Bind(
       methodName,
     );
+  }
+
+  SinkBind _sinkBindFromConstantReader(ConstantReader reader) {
+    final obj = reader.objectValue;
+    final name = obj.getField("name").toStringValue();
+    final methodName = obj.getField("methodName").toStringValue();
+    return SinkBind(name, methodName);
   }
 }

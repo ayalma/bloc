@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/element/type.dart';
 import 'package:bloc_generator/src/bind_code_builder.dart';
 import 'package:bloc_generator/src/helper.dart';
+import 'package:bloc_generator/src/sink_bind_code_builder.dart';
 import 'package:bloc_generator/src/sink_code_builder.dart';
 import 'package:bloc_generator/src/stream_code_builder.dart';
 import 'package:code_builder/code_builder.dart';
@@ -11,8 +12,10 @@ class BlocCodeBuilder {
   final List<SinkCodeBuilder> sinks;
   final List<StreamCodeBuilder> streams;
   final List<BindCodeBuilder> binds;
+  final List<SinkBindCodeBuilder> sinkBinds;
 
-  BlocCodeBuilder(this.className, this.sinks, this.streams, this.binds);
+  BlocCodeBuilder(
+      this.className, this.sinks, this.streams, this.binds, this.sinkBinds);
 
   String get _name => privateName(this.className.name, "Generated");
 
@@ -36,8 +39,7 @@ class BlocCodeBuilder {
 
     this.streams.forEach((s) => s.buildGetter(builder));
     this.sinks.forEach((s) => s.buildGetter(builder));
-
-    // this.sinkBinds.forEach((s) => s.buildGetter(builder));
+    this.sinkBinds.forEach((s) => s.buildGetter(builder));
 
     // builder.methods.add(this.buildMetadata());
 
@@ -52,6 +54,7 @@ class BlocCodeBuilder {
     final block = BlockBuilder();
     block.statements.add(Code("this._parent = value;"));
     this.binds.forEach((b) => b.buildSubscription(block));
+    this.sinkBinds.forEach((sb) => sb.buildSubscription(block));
 
     builder.methods.add(Method((b) => b
       ..name = "subscribeParent"
@@ -67,6 +70,7 @@ class BlocCodeBuilder {
     final block = BlockBuilder();
     this.sinks.forEach((s) => s.buildDispose(block));
     this.streams.forEach((s) => s.buildDispose(block));
+    this.sinkBinds.forEach((sb) => sb.buildDispose(block));
 
     builder.methods.add(Method((b) => b
       ..name = "dispose"

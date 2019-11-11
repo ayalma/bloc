@@ -17,7 +17,8 @@ class BlocGenerator extends GeneratorForAnnotation<BuiltBloc> {
           visitor.className,
           visitor.sinkCodeBuilders,
           visitor.streamCodeBuilders,
-          visitor.bindCodeBuilders);
+          visitor.bindCodeBuilders,
+          visitor.sinkBindCodeBuilders);
 
       return codeBuilder.buildCode();
     }
