@@ -1,8 +1,10 @@
+import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_generator/src/bind_code_builder.dart';
+import 'package:bloc_generator/src/event_stream_code_builder.dart';
 import 'package:bloc_generator/src/sink_bind_code_builder.dart';
 import 'package:bloc_generator/src/sink_code_builder.dart';
 import 'package:bloc_generator/src/stream_code_builder.dart';
@@ -16,6 +18,7 @@ class BlocModelVisitor extends SimpleElementVisitor {
   List<StreamCodeBuilder> streamCodeBuilders = [];
   List<BindCodeBuilder> bindCodeBuilders = [];
   List<SinkBindCodeBuilder> sinkBindCodeBuilders = [];
+  List<EventStreamCodeBuilder> eventStreamCodeBuilders = [];
 
   final ClassElement _classElement;
 
@@ -25,6 +28,20 @@ class BlocModelVisitor extends SimpleElementVisitor {
   visitConstructorElement(ConstructorElement element) {
     assert(className == null);
     className = element.type.returnType;
+  }
+
+  @override
+  visitMethodElement(MethodElement element) {
+    var eventStreamCodeBuilder =
+        ifAnnotated<EventStream, EventStreamCodeBuilder>(
+      element,
+      (ConstantReader reader, Element methodElement) => EventStreamCodeBuilder(
+        method: methodElement,
+        annotation: _eventStreamFromConstantReader(reader),
+      ),
+    );
+    if (eventStreamCodeBuilder != null)
+      eventStreamCodeBuilders.add(eventStreamCodeBuilder);
   }
 
   @override
@@ -38,7 +55,7 @@ class BlocModelVisitor extends SimpleElementVisitor {
   bool _scanForSink(FieldElement element) {
     var sinkGenerator = ifAnnotated<BlocSink, SinkCodeBuilder>(
       element,
-      (ConstantReader reader, FieldElement fieldElement) => SinkCodeBuilder(
+      (ConstantReader reader, Element fieldElement) => SinkCodeBuilder(
         field: fieldElement,
         annotation: _sinkFromConstantReader(reader),
       ),
@@ -51,7 +68,7 @@ class BlocModelVisitor extends SimpleElementVisitor {
   void _scanForStream(FieldElement element, bool isSinkPresent) {
     var streamCodeBuilder = ifAnnotated<BlocStream, StreamCodeBuilder>(
       element,
-      (ConstantReader reader, FieldElement fieldElement) => StreamCodeBuilder(
+      (ConstantReader reader, Element fieldElement) => StreamCodeBuilder(
           field: fieldElement,
           annotation: _streamFromConstantReader(reader),
           buildClose: !isSinkPresent),
@@ -63,7 +80,7 @@ class BlocModelVisitor extends SimpleElementVisitor {
   void _scanForBind(FieldElement element) {
     var bindCodeBuilder = ifAnnotated<Bind, BindCodeBuilder>(
       element,
-      (ConstantReader reader, FieldElement fieldElement) => BindCodeBuilder(
+      (ConstantReader reader, Element fieldElement) => BindCodeBuilder(
         blocClass: _classElement,
         field: fieldElement,
         annotation: _bindFromConstantReader(reader),
@@ -76,7 +93,7 @@ class BlocModelVisitor extends SimpleElementVisitor {
   void _scanForSinkBind(FieldElement element) {
     var sinkBindCodeBuilder = ifAnnotated<SinkBind, SinkBindCodeBuilder>(
       element,
-      (ConstantReader reader, FieldElement fieldElement) => SinkBindCodeBuilder(
+      (ConstantReader reader, Element fieldElement) => SinkBindCodeBuilder(
         blocClass: _classElement,
         field: fieldElement,
         annotation: _sinkBindFromConstantReader(reader),
@@ -113,5 +130,40 @@ class BlocModelVisitor extends SimpleElementVisitor {
     final name = obj.getField("name").toStringValue();
     final methodName = obj.getField("methodName").toStringValue();
     return SinkBind(name, methodName);
+  }
+
+  ///
+  /// extract [EventStream] from [ConstantReader]
+  ///
+  EventStream _eventStreamFromConstantReader(ConstantReader reader) {
+    final obj = reader.objectValue;
+
+    final eventName = obj.getField("eventName").toStringValue();
+    final stateName = obj.getField("stateName").toStringValue();
+    final eventSubjectType = _getSubjectType(obj.getField("eventSubjectType"));
+    final stateSubjectType = _getSubjectType(obj.getField("stateSubjectType"));
+
+    return EventStream(
+      eventName,
+      stateName,
+      eventSubjectType,
+      stateSubjectType,
+    );
+  }
+
+  ///
+  /// extract [SubjectType] from [DartObject]
+  ///
+  _getSubjectType(DartObject eventSubjectTypeObject) {
+    var subjectType = null;
+    SubjectType.values.forEach((s) {
+      final key = s.toString().replaceAll('SubjectType.', '');
+      final subjectTypeField = eventSubjectTypeObject.getField(key);
+      if (subjectTypeField != null) {
+        final index = subjectTypeField.toIntValue();
+        subjectType = SubjectType.values[index];
+      }
+    });
+    return subjectType;
   }
 }

@@ -15,7 +15,7 @@ class StreamCodeBuilder {
     @required FieldElement field,
     @required BlocStream annotation,
     this.buildClose,
-  })  : argumentType = extractBoundTypeName(field),
+  })  : argumentType = extractFieldBoundTypeName(field),
         this.fieldName = field.name,
         this.name = annotation.name ?? publicName(field.name, "Stream");
 

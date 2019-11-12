@@ -13,7 +13,7 @@ class SinkCodeBuilder {
       {@required FieldElement field,
       @required BlocSink annotation,
       String defaultName})
-      : _argumentType = extractBoundTypeName(field),
+      : _argumentType = extractFieldBoundTypeName(field),
         this._fieldName = field.name,
         this._name =
             annotation.name ?? defaultName ?? publicName(field.name, "Sink");

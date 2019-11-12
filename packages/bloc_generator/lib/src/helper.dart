@@ -2,8 +2,8 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:source_gen/source_gen.dart';
 
-TResult ifAnnotated<TAnnotation, TResult>(FieldElement element,
-    TResult builder(ConstantReader reader, FieldElement fieldElement)) {
+TResult ifAnnotated<TAnnotation, TResult>(Element element,
+    TResult builder(ConstantReader reader, Element fieldElement)) {
   final annotations =
       TypeChecker.fromRuntime(TAnnotation).annotationsOf(element);
   if (annotations.isEmpty) return null;
@@ -12,11 +12,14 @@ TResult ifAnnotated<TAnnotation, TResult>(FieldElement element,
 }
 
 /// Extract a parameterized type from a field's [type].
-String extractBoundTypeName(FieldElement field) {
+String extractFieldBoundTypeName(FieldElement field) =>
+    extractTypeBoundTypeName(field.type);
+
+String extractTypeBoundTypeName(DartType type) {
   DartType bound = null;
 
-  if (field.type is ParameterizedType) {
-    final arguments = (field.type as ParameterizedType).typeArguments;
+  if (type is ParameterizedType) {
+    final arguments = type.typeArguments;
     if (arguments.isNotEmpty) {
       bound = arguments.first;
     }

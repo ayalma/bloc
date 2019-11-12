@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/element/type.dart';
 import 'package:bloc_generator/src/bind_code_builder.dart';
+import 'package:bloc_generator/src/event_stream_code_builder.dart';
 import 'package:bloc_generator/src/helper.dart';
 import 'package:bloc_generator/src/sink_bind_code_builder.dart';
 import 'package:bloc_generator/src/sink_code_builder.dart';
@@ -13,9 +14,10 @@ class BlocCodeBuilder {
   final List<StreamCodeBuilder> streams;
   final List<BindCodeBuilder> binds;
   final List<SinkBindCodeBuilder> sinkBinds;
+  final List<EventStreamCodeBuilder> eventStreams;
 
-  BlocCodeBuilder(
-      this.className, this.sinks, this.streams, this.binds, this.sinkBinds);
+  BlocCodeBuilder(this.className, this.sinks, this.streams, this.binds,
+      this.sinkBinds, this.eventStreams);
 
   String get _name => privateName(this.className.name, "Generated");
 
@@ -29,10 +31,15 @@ class BlocCodeBuilder {
   }
 
   Class buildMixin() {
+    print(eventStreams);
     final builder = ClassBuilder()
       ..name = this._name
       ..implements.add(refer("GeneratedBloc<${className.name}>"));
 
+    eventStreams.forEach((es) {
+      es.buildFields(builder);
+      es.buildGutters(builder);
+    });
     builder.fields.add(Field((b) => b
       ..name = "_parent"
       ..type = refer(className.name)));
@@ -55,6 +62,7 @@ class BlocCodeBuilder {
     block.statements.add(Code("this._parent = value;"));
     this.binds.forEach((b) => b.buildSubscription(block));
     this.sinkBinds.forEach((sb) => sb.buildSubscription(block));
+    this.eventStreams.forEach((es) => es.buildSubscription(block));
 
     builder.methods.add(Method((b) => b
       ..name = "subscribeParent"
@@ -71,6 +79,7 @@ class BlocCodeBuilder {
     this.sinks.forEach((s) => s.buildDispose(block));
     this.streams.forEach((s) => s.buildDispose(block));
     this.sinkBinds.forEach((sb) => sb.buildDispose(block));
+    this.eventStreams.forEach((es) => es.buildDispose(block));
 
     builder.methods.add(Method((b) => b
       ..name = "dispose"

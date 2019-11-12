@@ -19,9 +19,9 @@ class SinkBindCodeBuilder {
       String defaultName})
       : this.name =
             annotation.name ?? defaultName ?? publicName(field.name, "Sink"),
-        this.argumentType = extractBoundTypeName(field),
+        this.argumentType = extractFieldBoundTypeName(field),
         this.method = _findListenMethod(blocClass, field, annotation.methodName,
-            extractBoundTypeName(field));
+            extractFieldBoundTypeName(field));
 
   static MethodElement _findListenMethod(ClassElement blocClass,
       FieldElement field, String name, String argumentType) {

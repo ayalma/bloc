@@ -15,9 +15,9 @@ class BindCodeBuilder {
       {@required ClassElement blocClass,
       @required this.field,
       @required this.annotation})
-      : this.argumentType = extractBoundTypeName(field),
+      : this.argumentType = extractFieldBoundTypeName(field),
         this.method = _findListenMethod(blocClass, field, annotation.methodName,
-            extractBoundTypeName(field));
+            extractFieldBoundTypeName(field));
 
   static MethodElement _findListenMethod(ClassElement blocClass,
       FieldElement field, String name, String argumentType) {
