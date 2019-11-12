@@ -1,10 +1,10 @@
 import 'package:analyzer/dart/element/type.dart';
-import 'package:bloc_generator/src/bind_code_builder.dart';
-import 'package:bloc_generator/src/event_stream_code_builder.dart';
-import 'package:bloc_generator/src/helper.dart';
-import 'package:bloc_generator/src/sink_bind_code_builder.dart';
-import 'package:bloc_generator/src/sink_code_builder.dart';
-import 'package:bloc_generator/src/stream_code_builder.dart';
+import 'package:built_bloc_generator/src/bind_code_builder.dart';
+import 'package:built_bloc_generator/src/event_stream_code_builder.dart';
+import 'package:built_bloc_generator/src/helper.dart';
+import 'package:built_bloc_generator/src/sink_bind_code_builder.dart';
+import 'package:built_bloc_generator/src/sink_code_builder.dart';
+import 'package:built_bloc_generator/src/stream_code_builder.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 

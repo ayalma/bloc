@@ -7,7 +7,7 @@ targets:
 builders:
   todo_reporter:
     target: ":bloc_generator"
-    import: "package:bloc_generator/builder.dart"
+    import: "package:built_bloc_generator/bloc_generator.dart"
     builder_factories: ["blocGenerator"]
     build_extensions: {".dart": [".bloc.g.part"]}
     auto_apply: dependents

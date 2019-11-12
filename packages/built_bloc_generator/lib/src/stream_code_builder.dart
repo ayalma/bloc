@@ -1,5 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:bloc/bloc.dart';
+import 'package:built_bloc/built_bloc.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:meta/meta.dart';
 

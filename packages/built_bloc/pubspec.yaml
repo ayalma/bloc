@@ -1,0 +1,14 @@
+name: built_bloc
+description: A new Flutter package project.
+version: 0.1.0
+author: ayalma (Ali Mohammadi) <alimohammadi7117@gmail.com>
+homepage: https://github.com/ayalma/bloc_base_app
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  meta: ^1.1.7
+
+dev_dependencies:
+  test: 1.3.4

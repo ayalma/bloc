@@ -1,8 +1,8 @@
-name: bloc_generator
+name: built_bloc_generator
 description: generator package for bloc
-version: 0.0.1
-author: Ali Mohammadi <alimohammadi7117@gmail.com>
-homepage:
+version: 0.1.0
+author: ayalma (Ali Mohammadi) <alimohammadi7117@gmail.com>
+homepage: https://github.com/ayalma/bloc_base_app
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -12,8 +12,10 @@ dependencies:
   source_gen: ^0.9.4+6
   code_builder: ^3.2.0
   analyzer: ^0.39.1
-  bloc:
-    path: ../bloc
+  meta: ^1.1.7
+  dart_style: ^1.3.3
+  built_bloc:
+    path: ../built_bloc
 
 
 dev_dependencies:

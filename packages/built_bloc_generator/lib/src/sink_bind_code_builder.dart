@@ -1,21 +1,25 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:bloc/bloc.dart';
-import 'package:bloc_generator/src/helper.dart';
+import 'package:built_bloc/built_bloc.dart';
+import 'package:built_bloc_generator/src/helper.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
-class BindCodeBuilder {
+class SinkBindCodeBuilder {
   final FieldElement field;
-  final MethodElement method;
-  final Bind annotation;
+  final SinkBind annotation;
   final String argumentType;
+  final String name;
+  final MethodElement method;
 
-  BindCodeBuilder(
+  SinkBindCodeBuilder(
       {@required ClassElement blocClass,
       @required this.field,
-      @required this.annotation})
-      : this.argumentType = extractFieldBoundTypeName(field),
+      @required this.annotation,
+      String defaultName})
+      : this.name =
+            annotation.name ?? defaultName ?? publicName(field.name, "Sink"),
+        this.argumentType = extractFieldBoundTypeName(field),
         this.method = _findListenMethod(blocClass, field, annotation.methodName,
             extractFieldBoundTypeName(field));
 
@@ -29,6 +33,15 @@ class BindCodeBuilder {
             element: field));
 
     return method;
+  }
+
+  void buildGetter(ClassBuilder builder) {
+    builder.methods.add(Method((b) => b
+      ..name = this.name
+      ..type = MethodType.getter
+      ..returns = refer("Function(${this.argumentType})")
+      ..lambda = true
+      ..body = Code("this._parent.${field.name}.sink.add")));
   }
 
   void buildSubscription(BlockBuilder builder) {
@@ -55,5 +68,10 @@ class BindCodeBuilder {
     final statement = "$listen;";
 
     builder.statements.add(Code(statement));
+  }
+
+  void buildDispose(BlockBuilder builder) {
+    builder.statements.add(Code("await _parent.${field.name}.drain();"));
+    builder.statements.add(Code("_parent.${field.name}.close();"));
   }
 }
