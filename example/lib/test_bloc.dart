@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:built_bloc/built_bloc.dart';
+import 'package:bbloc/bbloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,12 +17,4 @@ class TestBloc extends Bloc with _TestBloc {
   _onAddComment(String event) {}
 
   int _i = 0;
-
-  @EventStream(
-    "increment",
-    "incrementResult",
-  )
-  Stream<int> _onRunTest(String event) async* {
-    yield _i++;
-  }
 }

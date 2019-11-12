@@ -24,14 +24,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   rxdart: ^0.22.6
-  built_bloc:
-    path: ../packages/built_bloc
+  bbloc:
+    path: ../packages/bbloc
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  built_bloc_generator:
-    path: ../packages/built_bloc_generator
+  bbloc_generator:
+    path: ../packages/bbloc_generator
   build_runner: ^1.7.1
 
 

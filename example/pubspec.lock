@@ -29,6 +29,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.0"
+  bbloc:
+    dependency: "direct main"
+    description:
+      path: "../packages/bbloc"
+      relative: true
+    source: path
+    version: "0.1.0"
+  bbloc_generator:
+    dependency: "direct dev"
+    description:
+      path: "../packages/bbloc_generator"
+      relative: true
+    source: path
+    version: "0.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -78,20 +92,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
-  built_bloc:
-    dependency: "direct main"
-    description:
-      path: "../packages/built_bloc"
-      relative: true
-    source: path
-    version: "0.1.0"
-  built_bloc_generator:
-    dependency: "direct dev"
-    description:
-      path: "../packages/built_bloc_generator"
-      relative: true
-    source: path
-    version: "0.1.0"
   built_collection:
     dependency: transitive
     description:

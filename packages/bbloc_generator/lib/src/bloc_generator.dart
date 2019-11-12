@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:built_bloc/built_bloc.dart';
-import 'package:built_bloc_generator/src/bloc_code_builder.dart';
-import 'package:built_bloc_generator/src/bloc_model_visitor.dart';
+import 'package:bbloc/bbloc.dart';
+import 'package:bbloc_generator/src/bloc_code_builder.dart';
+import 'package:bbloc_generator/src/bloc_model_visitor.dart';
 import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
