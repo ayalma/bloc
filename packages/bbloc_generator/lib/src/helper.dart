@@ -16,7 +16,7 @@ String extractFieldBoundTypeName(FieldElement field) =>
     extractTypeBoundTypeName(field.type);
 
 String extractTypeBoundTypeName(DartType type) {
-  DartType bound = null;
+  DartType bound;
 
   if (type is ParameterizedType) {
     final arguments = type.typeArguments;

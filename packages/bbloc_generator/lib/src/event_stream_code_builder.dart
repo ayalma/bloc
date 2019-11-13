@@ -3,7 +3,6 @@ import 'package:bbloc/bbloc.dart';
 import 'package:bbloc_generator/src/helper.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:meta/meta.dart';
-import 'package:source_gen/source_gen.dart';
 
 class EventStreamCodeBuilder {
   final EventStream annotation;
@@ -79,28 +78,6 @@ class EventStreamCodeBuilder {
   }
 
   void buildSubscription(BlockBuilder builder) {
-    var streamName = _eventType;
-//runTestEvent.stream.asyncExpand(_onRunTest).pipe(result);
-    /// We call `listen` directly on [field] only if it is a stream, else we
-    /// consider that the type must have a `.stream` property.
-/*    final checker = TypeChecker.fromRuntime(Stream);
-    if (!checker.isAssignableFromType(this.field.type)) {
-      streamName += ".stream";
-    }
-
-    streamName = "this.${streamName}";
-
-    final callback = this.argumentType == null || this.argumentType == "void"
-        ? "(_) => value.${method.name}()"
-        : "value.${method.name}";
-
-    final listen = "${streamName}.listen($callback)";
-
-     final statement = this.annotation.external
-        ? "value.subscriptions.add($listen);"
-        : "$listen;";
-    final statement = "$listen;";*/
-
     final statement =
         "this.${_eventType.name}.stream.asyncExpand(_parent.${method.name}).pipe(${_stateType.name});";
 

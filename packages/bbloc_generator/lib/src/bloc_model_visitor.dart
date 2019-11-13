@@ -40,8 +40,9 @@ class BlocModelVisitor extends SimpleElementVisitor {
         annotation: _eventStreamFromConstantReader(reader),
       ),
     );
-    if (eventStreamCodeBuilder != null)
+    if (eventStreamCodeBuilder != null) {
       eventStreamCodeBuilders.add(eventStreamCodeBuilder);
+    }
   }
 
   @override
@@ -60,7 +61,9 @@ class BlocModelVisitor extends SimpleElementVisitor {
         annotation: _sinkFromConstantReader(reader),
       ),
     );
-    if (sinkGenerator != null) sinkCodeBuilders.add(sinkGenerator);
+    if (sinkGenerator != null) {
+      sinkCodeBuilders.add(sinkGenerator);
+    }
 
     return sinkGenerator != null;
   }
@@ -74,7 +77,9 @@ class BlocModelVisitor extends SimpleElementVisitor {
           buildClose: !isSinkPresent),
     );
 
-    if (streamCodeBuilder != null) streamCodeBuilders.add(streamCodeBuilder);
+    if (streamCodeBuilder != null) {
+      streamCodeBuilders.add(streamCodeBuilder);
+    }
   }
 
   void _scanForBind(FieldElement element) {
@@ -87,7 +92,9 @@ class BlocModelVisitor extends SimpleElementVisitor {
       ),
     );
 
-    if (bindCodeBuilder != null) bindCodeBuilders.add(bindCodeBuilder);
+    if (bindCodeBuilder != null) {
+      bindCodeBuilders.add(bindCodeBuilder);
+    }
   }
 
   void _scanForSinkBind(FieldElement element) {
@@ -100,8 +107,9 @@ class BlocModelVisitor extends SimpleElementVisitor {
       ),
     );
 
-    if (sinkBindCodeBuilder != null)
+    if (sinkBindCodeBuilder != null) {
       sinkBindCodeBuilders.add(sinkBindCodeBuilder);
+    }
   }
 
   BlocStream _streamFromConstantReader(ConstantReader reader) {
@@ -155,7 +163,7 @@ class BlocModelVisitor extends SimpleElementVisitor {
   /// extract [SubjectType] from [DartObject]
   ///
   _getSubjectType(DartObject eventSubjectTypeObject) {
-    var subjectType = null;
+    var subjectType;
     SubjectType.values.forEach((s) {
       final key = s.toString().replaceAll('SubjectType.', '');
       final subjectTypeField = eventSubjectTypeObject.getField(key);

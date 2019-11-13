@@ -32,14 +32,14 @@ packages:
   bbloc:
     dependency: "direct main"
     description:
-      path: "../packages/bbloc"
+      path: "../bbloc"
       relative: true
     source: path
     version: "0.1.0"
   bbloc_generator:
     dependency: "direct dev"
     description:
-      path: "../packages/bbloc_generator"
+      path: "../bbloc_generator"
       relative: true
     source: path
     version: "0.1.0"

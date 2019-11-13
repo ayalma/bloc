@@ -5,3 +5,7 @@
 * Add BlocSink annotation
 * Add SinkBind annotation
 * Add EventStream annotation
+
+## [0.1.1] - 2019/11/13
+
+* Update dependency's and fixed pubspec health suggestion

@@ -1,6 +1,6 @@
 name: bbloc
-description: A new Flutter package project.
-version: 0.1.0
+description: Fluttr package for build bloc boilerplate code with dart source generation , Bind,BlocSink,BlocStream,SinkBind and EventStream
+version: 0.1.1
 author: ayalma (Ali Mohammadi) <alimohammadi7117@gmail.com>
 homepage: https://github.com/ayalma/bloc
 

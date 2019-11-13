@@ -22,7 +22,7 @@ class TestBloc extends Bloc with _TestBloc {
     "increment",
     "incrementResult",
   )
-  Stream<int> _onRunTest(String event) async* {
+  Stream<int> _increment(String event) async* {
     yield _i++;
   }
 }
