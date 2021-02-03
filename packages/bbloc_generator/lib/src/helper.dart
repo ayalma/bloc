@@ -28,8 +28,7 @@ String extractTypeBoundTypeName(DartType type) {
   if (bound == null || bound.isVoid) {
     return "void";
   }
-
-  return bound.toString();
+  return bound.getDisplayString(withNullability: false);
 }
 
 String publicName(String name, String suffixIfNotPrivate) {

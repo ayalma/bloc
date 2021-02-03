@@ -11,5 +11,5 @@ builders:
     builder_factories: ["blocGenerator"]
     build_extensions: {".dart": [".bloc.g.part"]}
     auto_apply: dependents
-    build_to: cache
+    build_to: source
     applies_builders: ["source_gen|combining_builder"]

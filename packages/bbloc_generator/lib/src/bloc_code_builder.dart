@@ -19,7 +19,8 @@ class BlocCodeBuilder {
   BlocCodeBuilder(this.className, this.sinks, this.streams, this.binds,
       this.sinkBinds, this.eventStreams);
 
-  String get _name => privateName(this.className.name, "Generated");
+  String get _name => privateName(
+      this.className.getDisplayString(withNullability: false), "Generated");
 
   List<String> buildCode() {
     var library =
@@ -33,7 +34,8 @@ class BlocCodeBuilder {
   Class buildMixin() {
     final builder = ClassBuilder()
       ..name = this._name
-      ..implements.add(refer("GeneratedBloc<${className.name}>"));
+      ..implements.add(refer(
+          "GeneratedBloc<${className.getDisplayString(withNullability: false)}>"));
 
     eventStreams.forEach((es) {
       es.buildFields(builder);
@@ -41,7 +43,7 @@ class BlocCodeBuilder {
     });
     builder.fields.add(Field((b) => b
       ..name = "_parent"
-      ..type = refer(className.name)));
+      ..type = refer(className.getDisplayString(withNullability: false))));
 
     this.streams.forEach((s) => s.buildGetter(builder));
     this.sinks.forEach((s) => s.buildGetter(builder));
@@ -70,7 +72,8 @@ class BlocCodeBuilder {
       ..body = block.build()
       ..requiredParameters.add(Parameter((b) => b
         ..name = "value"
-        ..type = refer(this.className.name)))));
+        ..type =
+            refer(this.className.getDisplayString(withNullability: false))))));
   }
 
   void buildDispose(ClassBuilder builder) {
