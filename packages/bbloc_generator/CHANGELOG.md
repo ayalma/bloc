@@ -21,3 +21,24 @@
 
 ## [0.2.3] - 2021/2/3
 * fixed builder error
+
+## [0.2.4] - 2021/2/3
+* fixed version solving error
+## [0.2.5] - 2021/2/3
+* fixed version solving error
+
+
+## [0.2.6] - 2021/2/3
+* fixed version solving error
+
+## [0.2.7] - 2021/2/3
+* fixed version solving error
+
+## [0.2.8] - 2021/2/3
+* fixed version solving error
+
+
+
+
+
+
